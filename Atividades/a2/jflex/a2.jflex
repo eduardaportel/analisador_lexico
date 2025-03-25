@@ -1,7 +1,7 @@
 /**
  * Analisador léxico para expressões simples
  */
-package exemplo1;
+package a2;
 
 %%
 
