@@ -7,7 +7,7 @@ package a1;
 
 %class Lexer
 %unicode
-%debug
+// %debug
 %standalone
 %line
 %column
@@ -18,7 +18,7 @@ package a1;
 %eofval}
 
 %eof{
-    System.out.println("Análise léxica terminada com sucesso!");
+    System.out.println("Analise lexica terminada com sucesso!");
 %eof}
 
 %{
@@ -26,25 +26,27 @@ package a1;
 %}
 delim	= [\ \t\n]
 ws		= {delim}+
-letter	= [A-Za-z]
-digit	= [0-9]
-id		= {letter}({letter}|{digit})*
-number	= {digit}+(\.{digit}+)?(E[+-]?{digit}+)?
+letter	= [A-Z]
+constant = "true"|"false"
 
 %%
 /* Regras e ações */
 {ws}		{ /* ignorar */ }
-if			{ return new Token(Tag.IF); }
-then		{ return new Token(Tag.THEN); }
-else		{ return new Token(Tag.ELSE); }
-{id}		{ return new Id(yytext()); }
-{number}	{ return new Num(Double.parseDouble(yytext())); }
-"<"			{ return new Relop(Tag.LT);}
-"<="		{ return new Relop(Tag.LE);}
-"="			{ return new Relop(Tag.EQ);}
-"<>"		{ return new Relop(Tag.NE);}
-">"			{ return new Relop(Tag.GT);}
-">="		{ return new Relop(Tag.GE);}
+
+implies		{ return new Token(Tag.IMPLIES);}
+or		    { return new Token(Tag.OR);}
+and		    { return new Token(Tag.AND);}
+not         { return new Token(Tag.NOT);}
+"("		    { return new Token(Tag.LP);}
+")"		    { return new Token(Tag.RP);}
+
+{letter}		{ return new PropLetter(yytext().charAt(0));}
+{constant}			{ return new PropConstant(yytext().equals("true"));}
+
+
 /* Qualquer outro - gerar erro */
-.		    { throw new Error("Símbolo ilegal <" + yytext() +
-                "(" + (int)(yytext().charAt(0)) + ")" + ">"); }
+. {
+    throw new Error(
+        "Simbolo ilegal '" + yytext() + "' na linha " + (yyline + 1) + ", coluna " + (yycolumn + 1) + ". Use apenas A-Z, operadores logicos ou true/false."
+    );
+ }
