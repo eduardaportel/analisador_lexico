@@ -1,5 +1,4 @@
-if x < 3 then
-	x = 0
-else
-	y = 6.02E23
-
+if x > 0 then 
+  y := x *  2 
+else 
+  y :=  0

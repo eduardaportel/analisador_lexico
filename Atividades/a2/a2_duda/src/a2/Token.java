@@ -1,4 +1,4 @@
-package exemplo1;
+package a2;
 
 // Classe mais geral de token
 public class Token {
